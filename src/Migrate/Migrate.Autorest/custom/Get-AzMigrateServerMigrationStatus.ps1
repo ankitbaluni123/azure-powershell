@@ -252,8 +252,8 @@ function Get-AzMigrateServerMigrationStatus {
                 [double]$Value
             )
 
-            if ($Value -ne $null -and $Value -ne 0) {
-                return "$Value%"
+            if ($Value -ne $null) {
+                return "$Value %"
             } else {
                 return "-"
             }
@@ -263,7 +263,7 @@ function Get-AzMigrateServerMigrationStatus {
             param (
                 [double]$Value
             )
-            if ($Value -ne $null -and $Value -ne 0) {
+            if ($Value -ne $null) {
                 return "$Value MBps"
             } else {
                 return "-"
@@ -274,7 +274,7 @@ function Get-AzMigrateServerMigrationStatus {
             param (
                 [double]$Value
             )
-            if ($Value -ne $null -and $Value -ne 0) {
+            if ($Value -ne $null) {
                 return "$Value MB"
             } else {
                 return "-"
@@ -757,7 +757,7 @@ function Get-AzMigrateServerMigrationStatus {
                 # Normalize resource string for matching
                 $resourceNorm = $resource.ToLower()
                 $status = $row["Status"].ToLower()
-                $isQueued = $ReplicationMigrationItem.ReplicationStatus.ToLower() -match "queued"
+                $isQueued = $replicationState -match "Queued"
 
                 if ($status -eq "Throttled" -or $status -eq "At capacity") {
                     if ($resourceNorm -like "*ram*") {
