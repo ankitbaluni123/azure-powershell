@@ -312,6 +312,9 @@ function Get-AzMigrateServerMigrationStatus {
             if ($Utilization -eq "-" -or $Utilization -eq $null) {
                 return "-"
             }
+            if ($ResourceType -match "CPU Sum" -and $Utilization -eq 0) {
+                return "-"
+            }
 
             $thresholds = @{
                 "ApplianceRam"      = @{ AtCapacity = 95; Throttled = 85; Underutilized = 60 }
@@ -584,7 +587,7 @@ function Get-AzMigrateServerMigrationStatus {
 
             $replicationState = GetState -State $ReplicationMigrationItem.ProviderSpecificDetail.GatewayOperationDetailState -ReplicationMigrationItem $ReplicationMigrationItem
             if ($replicationState -match "Failed" -or $replicationState -match "Completed" -or ($replicationState -notmatch "InProgress" -and $replicationState -notmatch "Queued")) {
-                $op = $output.Add("Replication for server '$($ReplicationMigrationItem.MachineName)' is in state '$replicationState'. Expedite recommendations are only applicable for servers in 'Queued' or 'InProgress' state. No further recommendations are necessary.`n")
+                $op = $output.Add("Replication for server '$($ReplicationMigrationItem.MachineName)' is in state '$replicationState'. Expedite recommendations are only applicable for servers in 'Queued' or 'InProgress' state.`n")
                 return $output;
             }
 
